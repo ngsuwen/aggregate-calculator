@@ -45,16 +45,16 @@ export default function ResultViewer() {
           </IconButton>
         }
       >
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1, backgroundColor: result.selected?'#eaffc7':'#ffffff' }}>
           <Grid container spacing={2}>
             <Grid size={8}>
-              <Typography>{result.subject}</Typography>
+              <Typography sx={{fontWeight: 300}}>{result.subject}</Typography>
             </Grid>
             <Grid size={2}>
-              <Typography>{result.group}</Typography>
+              <Typography sx={{fontWeight: 300}}>{result.group}</Typography>
             </Grid>
             <Grid size={2}>
-              <Typography>{result.grade}</Typography>
+              <Typography sx={{fontWeight: 300}}>{result.grade}</Typography>
             </Grid>
           </Grid>
         </Box>
@@ -68,7 +68,7 @@ export default function ResultViewer() {
   };
 
   return (
-    <Box sx={{ width: 360 }}>
+    <Box sx={{ minWidth: 560 }} >
       {results.length === 0? 
       ""
       :
@@ -83,25 +83,34 @@ export default function ResultViewer() {
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
               <Grid size={8}>
-                <Typography>Subject</Typography>
+                <Typography sx={{fontWeight: 500}}>Subject</Typography>
               </Grid>
               <Grid size={2}>
-                <Typography>Group</Typography>
+                <Typography sx={{fontWeight: 500}}>Group</Typography>
               </Grid>
               <Grid size={2}>
-                <Typography>Grade</Typography>
+                <Typography sx={{fontWeight: 500}}>Grade</Typography>
               </Grid>
             </Grid>
           </Box>
         </ListItem>
+        <Divider />
         {getResults}
       </List>
       <Divider />
       </>}
-      <Stack direction="column" sx={{alignItems: "center"}}> 
-        <Button startIcon={<AddIcon />} sx = {{marginTop: 2}} disableRipple onClick={handleOpen}>
-          {results.length === 0? "Start by adding subjects":"Add Subject"}
+      <Stack direction="column" sx={{alignItems: "center", marginTop: 3}}> 
+        <Button variant="outlined" startIcon={<AddIcon sx={{ color: '#3160eb' }}/>} 
+        sx={{ 
+          textTransform: 'none', 
+          fontWeight: 400, 
+          fontSize: 16,
+          color: '#242222'
+        }} disableRipple onClick={handleOpen}>
+          {results.length === 0? "Start by adding subjects":"Add subject"}
         </Button> 
+        {results.length === 0? '':
+        <>
         <FormControl variant="standard" fullWidth sx = {{marginTop: 2}}>
           <InputLabel id="demo-simple-select-standard-label">Select Aggregate Type</InputLabel>  
           <Select value={aggregateType} onChange={selectAggregateType}>
@@ -110,9 +119,11 @@ export default function ResultViewer() {
             <MenuItem value="3">ELB4-A</MenuItem>
           </Select>
         </FormControl>
-        <Typography sx = {{marginTop: 3}}>
-          Net Aggregate Score: 5
+        <Typography sx = {{marginTop: 3, fontWeight: 300}}>
+          net aggregate score: 5
         </Typography>
+        </>
+        }
       </Stack>
         <Modal
           open={open}
