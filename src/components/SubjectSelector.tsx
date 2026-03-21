@@ -16,11 +16,23 @@ const subjectList = [
   { group: 'Science', value: 'CHEM', label: 'Chemistry' }
 ]
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
+
 export default function SubjectSelector() {
-  const { results, setResults } = useDataContext();
+  const { results, setResults, setOpen } = useDataContext();
   const [ subject, setSubject ] = useState<string>();
   const [ group, setGroup ] = useState<string>();
   const [ grade, setGrade ] = useState<string>();
+  const handleClose = () => setOpen(false);
 
   function submitSubject(): void {
     if ( subject === undefined ){
@@ -37,6 +49,7 @@ export default function SubjectSelector() {
       group: group,
       grade: grade
     }])
+    setOpen(false)
   }
 
   function selectSubject(sub: any): void {
@@ -53,7 +66,7 @@ export default function SubjectSelector() {
 
 
   return (
-    <Card variant="outlined" sx={{ width: 360 }}>
+    <Card variant="outlined" sx={style}>
       <Box sx={{ p: 2 }}>
         <Autocomplete
           freeSolo
@@ -99,7 +112,7 @@ export default function SubjectSelector() {
             justifyContent: "flex-end",
           }}
         >
-          <Chip label="Cancel" size="small" />
+          <Chip label="Cancel" size="small" onClick={handleClose} />
           <Chip color="primary" label="Add Subject" size="small" onClick={()=>submitSubject()}/>
         </Stack>
       </Box>

@@ -9,6 +9,8 @@ export interface ResultsType {
 export interface DataContextType {
     results: ResultsType[];
     setResults: React.Dispatch<React.SetStateAction<ResultsType[]>>;
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const DataContext = createContext<DataContextType | undefined>(undefined);
