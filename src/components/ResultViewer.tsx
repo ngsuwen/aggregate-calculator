@@ -64,13 +64,38 @@ export default function ResultViewer() {
 
   return (
     <Box sx={{ width: 360 }}>
+      {results.length === 0? 
+      ""
+      :
+      <>
       <List>
+        <ListItem
+        secondaryAction={
+          <IconButton edge="end" disabled>
+          </IconButton>
+          }
+        >
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={2}>
+              <Grid size={8}>
+                <Typography>Subject</Typography>
+              </Grid>
+              <Grid size={2}>
+                <Typography>Group</Typography>
+              </Grid>
+              <Grid size={2}>
+                <Typography>Grade</Typography>
+              </Grid>
+            </Grid>
+          </Box>
+        </ListItem>
         {getResults}
       </List>
       <Divider />
+      </>}
       <Stack direction="column" sx={{alignItems: "center"}}> 
         <Button startIcon={<AddIcon />} sx = {{marginTop: 2}} disableRipple onClick={handleOpen}>
-          Add Subject
+          {results.length === 0? "Start by adding subjects":"Add Subject"}
         </Button> 
         <FormControl variant="standard" fullWidth sx = {{marginTop: 2}}>
           <InputLabel id="demo-simple-select-standard-label">Select Aggregate Type</InputLabel>  

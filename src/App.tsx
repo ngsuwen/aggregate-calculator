@@ -3,6 +3,7 @@ import ResultViewer from './components/ResultViewer';
 import Stack from '@mui/material/Stack';
 import { type ResultsType, DataContext } from './DataContext';
 import { useState } from 'react';
+import { Typography } from '@mui/material';
 
 function App() {
 
@@ -17,9 +18,11 @@ function App() {
         spacing={2}   
         sx={{
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
+          height: '80vh',
         }}
       >
+        <Typography variant='h5' paddingBottom={3}>O-levels Aggregate Calculator</Typography>
         <ResultViewer/>
       </Stack>
     </div>   
