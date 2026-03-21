@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useDataContext } from '../DataContext';
 import { useState } from 'react';
-import { styled, lighten, darken } from '@mui/system';
+import { styled } from '@mui/system';
 import { scoreChecker } from './SubjectGroups';
 
 const style = {

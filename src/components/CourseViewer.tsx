@@ -4,15 +4,6 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-
-const subjectList = [
-  { group: 'Language', value: 'CH', label: 'Chinese' },
-  { group: 'Language', value: 'EN', label: 'English' },
-  { group: 'Science', value: 'BIO', label: 'Biology' },
-  { group: 'Science', value: 'CHEM', label: 'Chemistry' }
-]
 
 export default function CourseViewer() {
 
