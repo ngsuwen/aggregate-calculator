@@ -52,7 +52,7 @@ export default function ResultViewer() {
         key={i}
         secondaryAction={
           <IconButton edge="end" aria-label="delete" onClick={()=>removeSubject(result)}>
-            <DeleteIcon />
+            <DeleteIcon fontSize="small"/>
           </IconButton>
         }
       >
@@ -159,7 +159,7 @@ export default function ResultViewer() {
   }
 
   return (
-    <Box sx={{ minWidth: 560 }} >
+    <Box sx={{ width: '90vw', maxWidth: 560 }} >
       {results.length === 0? 
       ""
       :
