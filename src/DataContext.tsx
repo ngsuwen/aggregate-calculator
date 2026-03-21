@@ -6,11 +6,19 @@ export interface ResultsType {
     grade: string;
 }
 
+export interface SubjectType {
+    group: string;
+    label: string;
+    disabled: boolean;
+}
+
 export interface DataContextType {
     results: ResultsType[];
     setResults: React.Dispatch<React.SetStateAction<ResultsType[]>>;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    subjectList: SubjectType[];
+    SetSubjectList: React.Dispatch<React.SetStateAction<SubjectType[]>>;
 }
 
 export const DataContext = createContext<DataContextType | undefined>(undefined);

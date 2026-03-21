@@ -19,7 +19,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 
 export default function ResultViewer() {
-  const { results, setResults, open, setOpen } = useDataContext();
+  const { results, setResults, open, setOpen, SetSubjectList, subjectList } = useDataContext();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [aggregateType, setAggregateType] = useState<string>('');
@@ -28,6 +28,11 @@ export default function ResultViewer() {
     setResults(results.filter(function(value) { 
         return value !== result 
     }))
+    SetSubjectList(subjectList.map(item =>
+      item.label === result.subject
+        ? { ...item, disabled: false }
+        : item
+    ));
   }
 
   const getResults = results.map((result:ResultsType, i:number)=>{

@@ -9,13 +9,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useDataContext } from '../DataContext';
 import { useState } from 'react';
 
-const subjectList = [
-  { group: 'Language', value: 'CH', label: 'Chinese' },
-  { group: 'Language', value: 'EN', label: 'English' },
-  { group: 'Science', value: 'BIO', label: 'Biology' },
-  { group: 'Science', value: 'CHEM', label: 'Chemistry' }
-]
-
 const style = {
   position: 'absolute',
   top: '50%',
@@ -28,7 +21,7 @@ const style = {
 };
 
 export default function SubjectSelector() {
-  const { results, setResults, setOpen } = useDataContext();
+  const { results, setResults, setOpen, subjectList, SetSubjectList } = useDataContext();
   const [ subject, setSubject ] = useState<string>();
   const [ group, setGroup ] = useState<string>();
   const [ grade, setGrade ] = useState<string>();
@@ -50,6 +43,11 @@ export default function SubjectSelector() {
       grade: grade
     }])
     setOpen(false)
+    SetSubjectList(subjectList.map(item =>
+      item.label === subject
+        ? { ...item, disabled: true }
+        : item
+    ));
   }
 
   function selectSubject(sub: any): void {
@@ -64,6 +62,7 @@ export default function SubjectSelector() {
     setGrade(grade)
   }
 
+  
 
   return (
     <Card variant="outlined" sx={style}>
@@ -80,6 +79,9 @@ export default function SubjectSelector() {
               {params.children}
             </li>
           )}
+          getOptionDisabled={(option) =>
+            option.disabled  === true
+          }
           clearOnBlur
           onChange={(_event, value) => selectSubject(value)}
         />

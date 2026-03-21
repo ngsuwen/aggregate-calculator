@@ -1,17 +1,23 @@
 import './App.css'
 import ResultViewer from './components/ResultViewer';
 import Stack from '@mui/material/Stack';
-import { type ResultsType, DataContext } from './DataContext';
+import { type ResultsType, DataContext, type SubjectType } from './DataContext';
 import { useState } from 'react';
 import { Typography } from '@mui/material';
 
-function App() {
+const defaultSubjectList = [
+  { group: 'Language', label: 'Chinese', disabled: false },
+  { group: 'Language', label: 'English', disabled: false },
+  { group: 'Science', label: 'Biology', disabled: false },
+  { group: 'Science', label: 'Chemistry', disabled: false }
+]
 
+function App() {
   const [results, setResults] = useState<ResultsType[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-
+  const [subjectList, SetSubjectList] = useState<SubjectType[]>(defaultSubjectList)
   return (
-    <DataContext.Provider value={{ results, setResults, open, setOpen }}>
+    <DataContext.Provider value={{ results, setResults, open, setOpen, subjectList, SetSubjectList }}>
      <div>
       <Stack 
         direction="column" 
