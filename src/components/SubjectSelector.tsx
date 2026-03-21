@@ -6,6 +6,7 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { useDataContext } from '../DataContext';
 
 const subjectList = [
   { group: 'Language', value: 'CH', label: 'Chinese' },
@@ -15,6 +16,17 @@ const subjectList = [
 ]
 
 export default function SubjectSelector() {
+  const { results, setResults } = useDataContext();
+
+  console.log(results);
+
+  function submitSubject(): void {
+    setResults([...results,{
+      subject: 'Chinese',
+      group: '1',
+      grade: 'A'
+    }])
+  }
 
   return (
     <Card variant="outlined" sx={{ width: 360 }}>
@@ -62,7 +74,7 @@ export default function SubjectSelector() {
           }}
         >
           <Chip label="Cancel" size="small" />
-          <Chip color="primary" label="Add Subject" size="small" />
+          <Chip color="primary" label="Add Subject" size="small" onClick={()=>submitSubject()}/>
         </Stack>
       </Box>
     </Card>
