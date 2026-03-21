@@ -8,59 +8,49 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
-
-const resultList = [
-  { subject: 'Chinese', group: '1', grade: 'A' },
-  { subject: 'English', group: '1', grade: 'B' },
-  { subject: 'Chemistry', group: '1', grade: 'C' }
-]
+import { useDataContext, type ResultsType } from '../DataContext';
 
 export default function ResultViewer() {
+  const { results, setResults } = useDataContext();
+
+  function removeSubject(result:ResultsType): void {
+    setResults(results.filter(function(value) { 
+        return value !== result 
+    }))
+  }
+
+  const getResults = results.map((result:ResultsType, i:number)=>{
+      return (
+      <ListItem
+        key={i}
+        secondaryAction={
+          <IconButton edge="end" aria-label="delete" onClick={()=>removeSubject(result)}>
+            <DeleteIcon />
+          </IconButton>
+        }
+      >
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            <Grid size={8}>
+              <Typography>{result.subject}</Typography>
+            </Grid>
+            <Grid size={2}>
+              <Typography>{result.group}</Typography>
+            </Grid>
+            <Grid size={2}>
+              <Typography>{result.grade}</Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      </ListItem>
+      )
+    }
+  )
+
   return (
     <Box sx={{ width: 360 }}>
       <List>
-        <ListItem
-          secondaryAction={
-            <IconButton edge="end" aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          }
-        >
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-              <Grid size={8}>
-                <Typography>Chinese</Typography>
-              </Grid>
-              <Grid size={2}>
-                <Typography>G1</Typography>
-              </Grid>
-              <Grid size={2}>
-                <Typography>A</Typography>
-              </Grid>
-            </Grid>
-          </Box>
-        </ListItem>
-        <ListItem
-          secondaryAction={
-            <IconButton edge="end" aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          }
-        >
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-              <Grid size={8}>
-                <Typography color="blue">English</Typography>
-              </Grid>
-              <Grid size={2}>
-                <Typography color="blue">G1</Typography>
-              </Grid>
-              <Grid size={2}>
-                <Typography color="blue">A</Typography>
-              </Grid>
-            </Grid>
-          </Box>
-        </ListItem>
+        {getResults}
       </List>
       <Divider />
         <Button startIcon={<AddIcon />} sx = {{marginTop: 2}} disableRipple>

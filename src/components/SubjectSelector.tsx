@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useDataContext } from '../DataContext';
+import { useState } from 'react';
 
 const subjectList = [
   { group: 'Language', value: 'CH', label: 'Chinese' },
@@ -17,16 +18,39 @@ const subjectList = [
 
 export default function SubjectSelector() {
   const { results, setResults } = useDataContext();
-
-  console.log(results);
+  const [ subject, setSubject ] = useState<string>();
+  const [ group, setGroup ] = useState<string>();
+  const [ grade, setGrade ] = useState<string>();
 
   function submitSubject(): void {
+    if ( subject === undefined ){
+      return;
+    }
+    if ( group === undefined ){
+      return;
+    }
+    if ( grade === undefined ){
+      return;
+    }
     setResults([...results,{
-      subject: 'Chinese',
-      group: '1',
-      grade: 'A'
+      subject: subject,
+      group: group,
+      grade: grade
     }])
   }
+
+  function selectSubject(sub: any): void {
+    setSubject(sub.label)
+  }
+
+  function selectGroup(grp:string): void {
+    setGroup(grp)
+  }
+
+  function selectGrade(grade:string): void {
+    setGrade(grade)
+  }
+
 
   return (
     <Card variant="outlined" sx={{ width: 360 }}>
@@ -43,25 +67,27 @@ export default function SubjectSelector() {
               {params.children}
             </li>
           )}
+          clearOnBlur
+          onChange={(_event, value) => selectSubject(value)}
         />
         <Typography gutterBottom variant="body2">
           Select group
         </Typography>
         <Stack direction="row" spacing={1}>
-          <Chip color="primary" label="1" size="small" />
-          <Chip label="2" size="small" />
-          <Chip label="3" size="small" />
+          <Chip color={group === '1'?"primary":"default"} label="1" size="small" onClick={()=>selectGroup('1')}/>
+          <Chip color={group === '2'?"primary":"default"} label="2" size="small" onClick={()=>selectGroup('2')}/>
+          <Chip color={group === '3'?"primary":"default"} label="3" size="small" onClick={()=>selectGroup('3')}/>
         </Stack>
         <Typography gutterBottom marginTop={2} variant="body2">
           Select grade
         </Typography>
         <Stack direction="row" spacing={1}>
-          <Chip color="primary" label="A" size="small" />
-          <Chip label="B" size="small" />
-          <Chip label="C" size="small" />
-          <Chip label="D" size="small" />
-          <Chip label="E" size="small" />
-          <Chip label="F" size="small" />
+          <Chip color={grade === 'A'?"primary":"default"} label="A" size="small" onClick={()=>selectGrade('A')}/>
+          <Chip color={grade === 'B'?"primary":"default"} label="B" size="small" onClick={()=>selectGrade('B')}/>
+          <Chip color={grade === 'C'?"primary":"default"} label="C" size="small" onClick={()=>selectGrade('C')}/>
+          <Chip color={grade === 'D'?"primary":"default"} label="D" size="small" onClick={()=>selectGrade('D')}/>
+          <Chip color={grade === 'E'?"primary":"default"} label="E" size="small" onClick={()=>selectGrade('E')}/>
+          <Chip color={grade === 'F'?"primary":"default"} label="F" size="small" onClick={()=>selectGrade('F')}/>
         </Stack>
       </Box>
       <Divider />
