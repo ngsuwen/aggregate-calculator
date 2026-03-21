@@ -17,13 +17,17 @@ import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import { useEffect } from 'react';
+import { ELR2B2_A_G1, ELR2B2_A_G2 } from './SubjectGroups';
 
 export default function ResultViewer() {
   const { results, setResults, open, setOpen, SetSubjectList, subjectList } = useDataContext();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [aggregateType, setAggregateType] = useState<string>('');
-
+  const [aggregateScore, setAggregateScore] = useState<number>(0);
+  const [calculateError, setCalculateError] = useState<string>('');
+  
   function removeSubject(result:ResultsType): void {
     setResults(results.filter(function(value) { 
         return value !== result 
@@ -34,6 +38,13 @@ export default function ResultViewer() {
         : item
     ));
   }
+
+  useEffect(() => {
+      const refreshRequirements = () => {
+        checkRequirements(aggregateType);
+      };
+      refreshRequirements();
+    }, [results.length]);
 
   const getResults = results.map((result:ResultsType, i:number)=>{
       return (
@@ -65,7 +76,87 @@ export default function ResultViewer() {
 
   const selectAggregateType = (event: SelectChangeEvent) => {
     setAggregateType(event.target.value as string);
+    checkRequirements(event.target.value as string);
   };
+
+  const checkRequirements=(type:string)=>{
+    if (type === 'ELR2B2-A') {
+      // check enough G3
+      let noOfG3 = 0;
+      for (let value of results) {
+        if (value.group === '3') {
+          noOfG3++;
+        }
+      }
+      if (noOfG3 >= 5) {
+        calculateScore();
+      } else {
+        setCalculateError('not enough G3 subjects for this aggregate type')
+      }
+    } else {
+      setCalculateError('')
+    }
+  }
+
+  const calculateScore=()=>{
+    let score = 0;
+    let selectedSubjects = [];
+
+    // EL
+    let englishIndex = results.findIndex((value)=>value.subject === 'English')
+    if (englishIndex === -1) {
+      setCalculateError('please add english!');
+      return;
+    }
+    score += results[englishIndex].score;
+    selectedSubjects.push(results[englishIndex].subject);
+
+    // check for G1
+    const resultsG1 = results.filter(item => 
+      ELR2B2_A_G1.includes(item.subject)
+    );
+    if (resultsG1.length === 0) {
+      setCalculateError('missing relevant subjects');
+      return;
+    }
+    resultsG1.sort((a, b) => b.score - a.score);
+    score += resultsG1[0].score;
+    selectedSubjects.push(resultsG1[0].subject);
+
+    // check for G2
+    const resultsG2 = results.filter(item => 
+      ELR2B2_A_G2.includes(item.subject) && !selectedSubjects.includes(item.subject)
+    );
+    if (resultsG2.length === 0) {
+      setCalculateError('missing relevant subjects');
+      return;
+    }
+    resultsG2.sort((a, b) => b.score - a.score);
+    score += resultsG2[0].score;
+    selectedSubjects.push(resultsG2[0].subject);
+
+    // check for B2
+    const resultsB2 = results.filter(item => 
+      !selectedSubjects.includes(item.subject)
+    );
+    resultsB2.sort((a, b) => a.score - b.score);
+    score += resultsB2[0].score + resultsB2[1].score;
+    console.log(score)
+    console.log(resultsB2)
+    selectedSubjects.push(resultsB2[0].subject)
+    selectedSubjects.push(resultsB2[1].subject)
+    
+    setCalculateError('');
+    setAggregateScore(score);
+
+    // update selected subjects in results to true
+    const newResults: ResultsType[] = results.map((item:ResultsType) => {
+      if (selectedSubjects.includes(item.subject)) return {...item, selected: true};
+      if (!selectedSubjects.includes(item.subject)) return {...item, selected: false};
+      return item;
+    });
+    setResults(newResults);
+  }
 
   return (
     <Box sx={{ minWidth: 560 }} >
@@ -114,14 +205,21 @@ export default function ResultViewer() {
         <FormControl variant="standard" fullWidth sx = {{marginTop: 2}}>
           <InputLabel id="demo-simple-select-standard-label">Select Aggregate Type</InputLabel>  
           <Select value={aggregateType} onChange={selectAggregateType}>
-            <MenuItem value="1">B4</MenuItem>
-            <MenuItem value="2">ELB3</MenuItem>
-            <MenuItem value="3">ELB4-A</MenuItem>
+            <MenuItem value="ELR2B2-A">ELR2B2-A</MenuItem>
+            <MenuItem value="ELR2B2-B">ELR2B2-B</MenuItem>
+            <MenuItem value="ELR2B2-C">ELR2B2-C</MenuItem>
+            <MenuItem value="ELR2B2-D">ELR2B2-D</MenuItem>
           </Select>
         </FormControl>
-        <Typography sx = {{marginTop: 3, fontWeight: 300}}>
-          net aggregate score: 5
-        </Typography>
+        {calculateError !== ''?
+          <Typography sx = {{marginTop: 3, fontWeight: 300, color:'#ed6464'}}>
+            {calculateError}
+          </Typography> : 
+        aggregateScore > 0? 
+          <Typography sx = {{marginTop: 3, fontWeight: 300}}>
+            net aggregate score: {aggregateScore}
+          </Typography> : ''
+        }
         </>
         }
       </Stack>

@@ -9,6 +9,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useDataContext } from '../DataContext';
 import { useState } from 'react';
 import { styled, lighten, darken } from '@mui/system';
+import { scoreChecker } from './SubjectGroups';
 
 const style = {
   position: 'absolute',
@@ -40,7 +41,6 @@ export default function SubjectSelector() {
   const [ errorSub, setErrorSub ] = useState<boolean>(false);
   const [ errorGrp, setErrorGrp ] = useState<boolean>(false);
   const [ errorGrd, setErrorGrd ] = useState<boolean>(false);
-  const handleClose = () => setOpen(false);
 
   function submitSubject(): void {
     let error = false;
@@ -69,7 +69,8 @@ export default function SubjectSelector() {
       subject: subject!,
       group: group!,
       grade: grade!,
-      selected: false
+      selected: false,
+      score: scoreChecker(grade!)
     }])
     setOpen(false)
     SetSubjectList(subjectList.map(item =>
@@ -125,17 +126,40 @@ export default function SubjectSelector() {
           <Chip color={group === '2'?"primary":"default"} label="2" onClick={()=>selectGroup('2')}/>
           <Chip color={group === '3'?"primary":"default"} label="3" onClick={()=>selectGroup('3')}/>
         </Stack>
+        {group?
         <Typography component="span" variant="body2" sx ={{display: 'inline-block', mb:1, mt:3}}>
           Select grade {errorGrd? <Typography component="span" variant="body2" sx ={{color:'#ed6464'}}>* required</Typography>:''}
-        </Typography>
+        </Typography>:''}
+        {group === '3'?
+        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', rowGap: 1 }}>
+          <Chip color={grade === 'A1'?"primary":"default"} label="A1" onClick={()=>selectGrade('A1')}/>
+          <Chip color={grade === 'A2'?"primary":"default"} label="A2" onClick={()=>selectGrade('A2')}/>
+          <Chip color={grade === 'B3'?"primary":"default"} label="B3" onClick={()=>selectGrade('B3')}/>
+          <Chip color={grade === 'B4'?"primary":"default"} label="B4" onClick={()=>selectGrade('B4')}/>
+          <Chip color={grade === 'C5'?"primary":"default"} label="C5" onClick={()=>selectGrade('C5')}/>
+          <Chip color={grade === 'C6'?"primary":"default"} label="C6" onClick={()=>selectGrade('C6')}/>
+          <Chip color={grade === 'D7'?"primary":"default"} label="D7" onClick={()=>selectGrade('D7')}/>
+          <Chip color={grade === 'E8'?"primary":"default"} label="E8" onClick={()=>selectGrade('E8')}/>
+          <Chip color={grade === '9'?"primary":"default"} label="9" onClick={()=>selectGrade('9')}/>
+        </Stack> : 
+        group === '2'?
+        <Stack direction="row" spacing={1}>
+          <Chip color={grade === '1'?"primary":"default"} label="1" onClick={()=>selectGrade('1')}/>
+          <Chip color={grade === '2'?"primary":"default"} label="2" onClick={()=>selectGrade('2')}/>
+          <Chip color={grade === '3'?"primary":"default"} label="3" onClick={()=>selectGrade('3')}/>
+          <Chip color={grade === '4'?"primary":"default"} label="4" onClick={()=>selectGrade('4')}/>
+          <Chip color={grade === '5'?"primary":"default"} label="5" onClick={()=>selectGrade('5')}/>
+          <Chip color={grade === '6'?"primary":"default"} label="6" onClick={()=>selectGrade('6')}/>
+        </Stack> : 
+        group === '1'?
         <Stack direction="row" spacing={1}>
           <Chip color={grade === 'A'?"primary":"default"} label="A" onClick={()=>selectGrade('A')}/>
           <Chip color={grade === 'B'?"primary":"default"} label="B" onClick={()=>selectGrade('B')}/>
           <Chip color={grade === 'C'?"primary":"default"} label="C" onClick={()=>selectGrade('C')}/>
           <Chip color={grade === 'D'?"primary":"default"} label="D" onClick={()=>selectGrade('D')}/>
           <Chip color={grade === 'E'?"primary":"default"} label="E" onClick={()=>selectGrade('E')}/>
-          <Chip color={grade === 'F'?"primary":"default"} label="F" onClick={()=>selectGrade('F')}/>
-        </Stack>
+        </Stack> : ''
+        }
       </Box>
       <Divider />
       <Box sx={{ p: 2 }}>

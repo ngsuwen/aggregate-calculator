@@ -5,6 +5,7 @@ export interface ResultsType {
     group: string;
     grade: string;
     selected: boolean;
+    score: number;
 }
 
 export interface SubjectType {
