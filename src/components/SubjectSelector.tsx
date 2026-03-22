@@ -9,7 +9,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useDataContext } from '../DataContext';
 import { useState } from 'react';
 import { styled } from '@mui/system';
-import { scoreChecker, scoreCheckerITE } from './SubjectGroups';
+import { scoreChecker, scoreCheckerELMAB3, scoreCheckerITE } from './SubjectGroups';
 
 const style = {
   position: 'absolute',
@@ -72,8 +72,10 @@ export default function SubjectSelector() {
       grade: grade!,
       selected: false,
       score: scoreChecker(grade!),
-      scoreITE: scoreCheckerITE(grade!)
+      scoreITE: scoreCheckerITE(grade!),
+      scoreELMAB3: scoreCheckerELMAB3(grade!)
     }])
+    
     setOpen(false)
     SetSubjectList(subjectList.map(item =>
       item.label === subject
@@ -142,7 +144,7 @@ export default function SubjectSelector() {
           <Chip color={grade === 'C6'?"primary":"default"} label="C6" onClick={()=>selectGrade('C6')}/>
           <Chip color={grade === 'D7'?"primary":"default"} label="D7" onClick={()=>selectGrade('D7')}/>
           <Chip color={grade === 'E8'?"primary":"default"} label="E8" onClick={()=>selectGrade('E8')}/>
-          <Chip color={grade === 'F9'?"primary":"default"} label="9" onClick={()=>selectGrade('F9')}/>
+          <Chip color={grade === 'F9'?"primary":"default"} label="F9" onClick={()=>selectGrade('F9')}/>
         </Stack> : 
         group === '2'?
         <Stack direction="row" spacing={1}>
@@ -160,6 +162,7 @@ export default function SubjectSelector() {
           <Chip color={grade === 'C'?"primary":"default"} label="C" onClick={()=>selectGrade('C')}/>
           <Chip color={grade === 'D'?"primary":"default"} label="D" onClick={()=>selectGrade('D')}/>
           <Chip color={grade === 'E'?"primary":"default"} label="E" onClick={()=>selectGrade('E')}/>
+          <Chip color={grade === 'U'?"primary":"default"} label="U" onClick={()=>selectGrade('U')}/>
         </Stack> : ''
         }
       </Box>

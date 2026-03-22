@@ -66,5 +66,31 @@ export const scoreCheckerITE=(grade:string):number=>{
     if (grade === 'C') { return 3 }
     if (grade === 'D') { return 4 }
     if (grade === 'E') { return 5 }
+    if (grade === 'U') { return 5 }
+    return 0
+}
+
+export const scoreCheckerELMAB3=(grade:string):number=>{
+    if (grade === 'A1') { return 1 }
+    if (grade === 'A2') { return 1 }
+    if (grade === 'B3') { return 1 }
+    if (grade === 'B4') { return 2 }
+    if (grade === 'C5') { return 2 }
+    if (grade === 'C6') { return 2 }
+    if (grade === 'D7') { return 3 }
+    if (grade === 'E8') { return 4 }
+    if (grade === 'F9') { return 100 }
+    if (grade === '1') { return 1 }
+    if (grade === '2') { return 2 }
+    if (grade === '3') { return 3 }
+    if (grade === '4') { return 4 }
+    if (grade === '5') { return 5 }
+    if (grade === '6') { return 100 }
+    if (grade === 'A') { return 1 }
+    if (grade === 'B') { return 2 }
+    if (grade === 'C') { return 3 }
+    if (grade === 'D') { return 4 }
+    if (grade === 'E') { return 5 }
+    if (grade === 'U') { return 100 }
     return 0
 }

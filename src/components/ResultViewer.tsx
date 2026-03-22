@@ -188,6 +188,9 @@ export default function ResultViewer() {
     } else if (polyAggregateTypes.includes(aggregateType)) {
       score += results[englishIndex].score;
       selectedSubjects.push(results[englishIndex].subject);
+    } else if (aggregateType === 'ELMAB3') {
+      score += results[englishIndex].scoreELMAB3;
+      selectedSubjects.push(results[englishIndex].subject);
     } else if (iteAggregateTypesEL.includes(aggregateType)) {
       score += results[englishIndex].scoreITE;
       selectedSubjects.push(results[englishIndex].subject);
@@ -309,7 +312,11 @@ export default function ResultViewer() {
           return;
         }
         resultsMA.sort((a, b) => a.scoreITE - b.scoreITE);
-        score += resultsMA[0].scoreITE;
+        if (aggregateType === 'ELMAB3') {
+          score += resultsMA[0].scoreELMAB3;
+        } else {
+          score += resultsMA[0].scoreITE;
+        }
         selectedSubjects.push(resultsMA[0].subject);
       }
       if (aggregateType === 'R1B3') {      
@@ -342,7 +349,11 @@ export default function ResultViewer() {
           !selectedSubjects.includes(item.subject)
         );
         resultsB3.sort((a, b) => a.scoreITE - b.scoreITE);
-        score = score + resultsB3[0].scoreITE + resultsB3[1].scoreITE + resultsB3[2].scoreITE;
+        if (aggregateType === 'ELMAB3') {
+          score = score + resultsB3[0].scoreELMAB3 + resultsB3[1].scoreELMAB3 + resultsB3[2].scoreELMAB3;
+        } else {
+          score = score + resultsB3[0].scoreITE + resultsB3[1].scoreITE + resultsB3[2].scoreITE;
+        }
         selectedSubjects.push(resultsB3[0].subject)
         selectedSubjects.push(resultsB3[1].subject)
         selectedSubjects.push(resultsB3[2].subject)
@@ -356,6 +367,13 @@ export default function ResultViewer() {
       score = score + resultsB2[0].score + resultsB2[1].score;
       selectedSubjects.push(resultsB2[0].subject)
       selectedSubjects.push(resultsB2[1].subject)
+    }
+
+    // check for F9 for ITE ELMAB3
+    if (aggregateType === 'ELMAB3'  && score >= 100) {
+      setCalculateError('grade F9, 6 and U are not eligible for this aggregate type');
+      resetSelected();
+      return;
     }
     
     setCalculateError('');

@@ -7,6 +7,7 @@ export interface ResultsType {
     selected: boolean;
     score: number;
     scoreITE: number;
+    scoreELMAB3: number;
 }
 
 export interface SubjectType {
