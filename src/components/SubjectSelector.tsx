@@ -9,7 +9,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useDataContext } from '../DataContext';
 import { useState } from 'react';
 import { styled } from '@mui/system';
-import { scoreChecker } from './SubjectGroups';
+import { scoreChecker, scoreCheckerITE } from './SubjectGroups';
 
 const style = {
   position: 'absolute',
@@ -71,7 +71,8 @@ export default function SubjectSelector() {
       group: group!,
       grade: grade!,
       selected: false,
-      score: scoreChecker(grade!)
+      score: scoreChecker(grade!),
+      scoreITE: scoreCheckerITE(grade!)
     }])
     setOpen(false)
     SetSubjectList(subjectList.map(item =>
@@ -141,7 +142,7 @@ export default function SubjectSelector() {
           <Chip color={grade === 'C6'?"primary":"default"} label="C6" onClick={()=>selectGrade('C6')}/>
           <Chip color={grade === 'D7'?"primary":"default"} label="D7" onClick={()=>selectGrade('D7')}/>
           <Chip color={grade === 'E8'?"primary":"default"} label="E8" onClick={()=>selectGrade('E8')}/>
-          <Chip color={grade === '9'?"primary":"default"} label="9" onClick={()=>selectGrade('9')}/>
+          <Chip color={grade === 'F9'?"primary":"default"} label="9" onClick={()=>selectGrade('F9')}/>
         </Stack> : 
         group === '2'?
         <Stack direction="row" spacing={1}>

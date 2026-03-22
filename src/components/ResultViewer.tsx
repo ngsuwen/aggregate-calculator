@@ -18,7 +18,7 @@ import { useState } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { useEffect } from 'react';
-import { ELR2B2_A_G1, ELR2B2_A_G2, ELR2B2_B_G2, ELR2B2_BCD_G1, ELR2B2_C_G2, ELR2B2_D_G2, L1R5_L1, L1R5_R1, L1R5_R2, L1R5_R3, polyAggregateTypes, polyAggregateTypesBCD } from './SubjectGroups';
+import { ELR2B2_A_G1, ELR2B2_A_G2, ELR2B2_B_G2, ELR2B2_BCD_G1, ELR2B2_C_G2, ELR2B2_D_G2, ite4Subjects, ite5Subjects, iteAggregateTypes, iteAggregateTypesEL, L1R5_L1, L1R5_R1, L1R5_R2, L1R5_R3, polyAggregateTypes, polyAggregateTypesBCD, R1B3_R1 } from './SubjectGroups';
 
 export default function ResultViewer() {
   const { results, setResults, open, setOpen, SetSubjectList, subjectList } = useDataContext();
@@ -100,8 +100,22 @@ export default function ResultViewer() {
         setCalculateError('not enough G3 subjects for this aggregate type');
         resetSelected();
       }
-    } else {
-      setCalculateError('')
+    } else if (ite4Subjects.includes(aggregateType)) {
+      if (results.length >= 4) {
+        calculateScore();
+      } else {
+        setCalculateError('not enough subjects for this aggregate type');
+        resetSelected();
+      }
+    } else if (ite5Subjects.includes(aggregateType)) {
+      if (results.length >= 5) {
+        calculateScore();
+      } else {
+        setCalculateError('not enough subjects for this aggregate type');
+        resetSelected();
+      }
+    } else if (aggregateType !== '') {
+      throw new Error('aggregate type not found');
     }
   }
 
@@ -117,10 +131,12 @@ export default function ResultViewer() {
 
     // EL or L1
     let englishIndex = results.findIndex((value)=>value.subject === 'English')
-    if (englishIndex === -1) {
-      setCalculateError('please add english!');
-      resetSelected();
-      return;
+    if (polyAggregateTypes.includes(aggregateType) || aggregateType === 'L1R5' || iteAggregateTypesEL.includes(aggregateType)) {
+      if (englishIndex === -1) {
+        setCalculateError('missing english subject');
+        resetSelected();
+        return;
+      }
     }
 
     if (aggregateType === 'L1R5') {
@@ -131,8 +147,11 @@ export default function ResultViewer() {
       resultsL1.sort((a, b) => a.score - b.score);
       score += resultsL1[0].score;
       selectedSubjects.push(resultsL1[0].subject);
-    } else {
+    } else if (polyAggregateTypes.includes(aggregateType)) {
       score += results[englishIndex].score;
+      selectedSubjects.push(results[englishIndex].subject);
+    } else if (iteAggregateTypesEL.includes(aggregateType)) {
+      score += results[englishIndex].scoreITE;
       selectedSubjects.push(results[englishIndex].subject);
     }
 
@@ -231,16 +250,75 @@ export default function ResultViewer() {
       selectedSubjects.push(resultsR3[0].subject);
     }
 
-    // check for B2
-    const resultsB2 = results.filter(item => 
-      !selectedSubjects.includes(item.subject)
-    );
-    resultsB2.sort((a, b) => a.score - b.score);
-    score = score + resultsB2[0].score + resultsB2[1].score;
-    console.log(score)
-    console.log(resultsB2)
-    selectedSubjects.push(resultsB2[0].subject)
-    selectedSubjects.push(resultsB2[1].subject)
+    if (iteAggregateTypes.includes(aggregateType)) {
+      // B4
+      if (aggregateType === 'B4') {
+        const resultsB4 = [...results].sort((a, b) => a.scoreITE - b.scoreITE);
+        score = resultsB4[0].scoreITE + resultsB4[1].scoreITE + resultsB4[2].scoreITE + resultsB4[3].scoreITE;
+        selectedSubjects.push(resultsB4[0].subject)
+        selectedSubjects.push(resultsB4[1].subject)
+        selectedSubjects.push(resultsB4[2].subject)
+        selectedSubjects.push(resultsB4[3].subject)
+      }
+      // MA
+      if (aggregateType.includes('MA')) {
+        const resultsMA:ResultsType[] = results.filter(item => 
+        item.subject.includes('Mathematics')
+        );
+        if (resultsMA.length === 0) {
+          setCalculateError('missing relevant subjects from mathematics');
+          resetSelected();
+          return;
+        }
+        resultsMA.sort((a, b) => a.scoreITE - b.scoreITE);
+        score += resultsMA[0].scoreITE;
+        selectedSubjects.push(resultsMA[0].subject);
+      }
+      if (aggregateType === 'R1B3') {      
+        let resultsR1:ResultsType[] = [];
+        resultsR1 = results.filter(item => 
+        R1B3_R1.includes(item.subject) && !selectedSubjects.includes(item.subject)
+        );
+        if (resultsR1.length === 0) {
+          setCalculateError('missing relevant subjects from mathematics or science');
+          resetSelected();
+          return;
+        }
+        resultsR1.sort((a, b) => a.scoreITE - b.scoreITE);
+        score += resultsR1[0].scoreITE;
+        selectedSubjects.push(resultsR1[0].subject);
+      }
+      // B2
+      if (aggregateType.includes('B2')) {
+        const resultsB2 = results.filter(item => 
+          !selectedSubjects.includes(item.subject)
+        );
+        resultsB2.sort((a, b) => a.scoreITE - b.scoreITE);
+        score = score + resultsB2[0].scoreITE + resultsB2[1].scoreITE;
+        selectedSubjects.push(resultsB2[0].subject)
+        selectedSubjects.push(resultsB2[1].subject)
+      }
+      // B3
+      if (aggregateType.includes('B3')) {
+        const resultsB3 = results.filter(item => 
+          !selectedSubjects.includes(item.subject)
+        );
+        resultsB3.sort((a, b) => a.scoreITE - b.scoreITE);
+        score = score + resultsB3[0].scoreITE + resultsB3[1].scoreITE + resultsB3[2].scoreITE;
+        selectedSubjects.push(resultsB3[0].subject)
+        selectedSubjects.push(resultsB3[1].subject)
+        selectedSubjects.push(resultsB3[2].subject)
+      }
+    } else {
+      // check for B2 (POLY / JC)
+      const resultsB2 = results.filter(item => 
+        !selectedSubjects.includes(item.subject)
+      );
+      resultsB2.sort((a, b) => a.score - b.score);
+      score = score + resultsB2[0].score + resultsB2[1].score;
+      selectedSubjects.push(resultsB2[0].subject)
+      selectedSubjects.push(resultsB2[1].subject)
+    }
     
     setCalculateError('');
     setAggregateScore(score);
@@ -306,6 +384,12 @@ export default function ResultViewer() {
             <MenuItem value="ELR2B2-B">(POLY) ELR2B2-B</MenuItem>
             <MenuItem value="ELR2B2-C">(POLY) ELR2B2-C</MenuItem>
             <MenuItem value="ELR2B2-D">(POLY) ELR2B2-D</MenuItem>
+            <MenuItem value="B4">(ITE) B4</MenuItem>
+            <MenuItem value="ELB3">(ITE) ELB3</MenuItem>
+            <MenuItem value="ELMAB2">(ITE) ELMAB2</MenuItem>
+            <MenuItem value="ELMAB3">(ITE) ELMAB3</MenuItem>
+            <MenuItem value="MAB3">(ITE) MAB3</MenuItem>
+            <MenuItem value="R1B3">(ITE) R1B3</MenuItem>
           </Select>
         </FormControl>
         {calculateError !== ''?

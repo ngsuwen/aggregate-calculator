@@ -6,6 +6,7 @@ export interface ResultsType {
     grade: string;
     selected: boolean;
     score: number;
+    scoreITE: number;
 }
 
 export interface SubjectType {
