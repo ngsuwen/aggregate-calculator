@@ -18,7 +18,7 @@ import { useState } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { useEffect } from 'react';
-import { ELR2B2_A_G1, ELR2B2_A_G2 } from './SubjectGroups';
+import { ELR2B2_A_G1, ELR2B2_A_G2, ELR2B2_B_G2, ELR2B2_BCD_G1, ELR2B2_C_G2, ELR2B2_D_G2, polyAggregateTypes, polyAggregateTypesBCD } from './SubjectGroups';
 
 export default function ResultViewer() {
   const { results, setResults, open, setOpen, SetSubjectList, subjectList } = useDataContext();
@@ -44,7 +44,7 @@ export default function ResultViewer() {
         checkRequirements(aggregateType);
       };
       refreshRequirements();
-    }, [results.length]);
+    }, [results.length, aggregateType]);
 
   const getResults = results.map((result:ResultsType, i:number)=>{
       return (
@@ -80,7 +80,7 @@ export default function ResultViewer() {
   };
 
   const checkRequirements=(type:string)=>{
-    if (type === 'ELR2B2-A') {
+    if (polyAggregateTypes.includes(type)) {
       // check enough G3
       let noOfG3 = 0;
       for (let value of results) {
@@ -89,7 +89,7 @@ export default function ResultViewer() {
         }
       }
       if (noOfG3 >= 5) {
-        calculateScore();
+        calculateScore(type);
       } else {
         setCalculateError('not enough G3 subjects for this aggregate type')
       }
@@ -98,7 +98,7 @@ export default function ResultViewer() {
     }
   }
 
-  const calculateScore=()=>{
+  const calculateScore=(type:string)=>{
     let score = 0;
     let selectedSubjects = [];
 
@@ -112,9 +112,16 @@ export default function ResultViewer() {
     selectedSubjects.push(results[englishIndex].subject);
 
     // check for G1
-    const resultsG1 = results.filter(item => 
+    let resultsG1:ResultsType[] = [];
+    if (type === 'ELR2B2-A') {
+      resultsG1 = results.filter(item => 
       ELR2B2_A_G1.includes(item.subject)
-    );
+      );
+    } else if (polyAggregateTypesBCD.includes(type)) {
+      resultsG1 = results.filter(item => 
+      ELR2B2_BCD_G1.includes(item.subject)
+      );
+    }
     if (resultsG1.length === 0) {
       setCalculateError('missing relevant subjects');
       return;
@@ -124,9 +131,24 @@ export default function ResultViewer() {
     selectedSubjects.push(resultsG1[0].subject);
 
     // check for G2
-    const resultsG2 = results.filter(item => 
+    let resultsG2:ResultsType[] = [];
+    if (type === 'ELR2B2-A') {
+      resultsG2 = results.filter(item => 
       ELR2B2_A_G2.includes(item.subject) && !selectedSubjects.includes(item.subject)
-    );
+      );
+    } else if (type === 'ELR2B2-B') {
+      resultsG2 = results.filter(item => 
+      ELR2B2_B_G2.includes(item.subject) && !selectedSubjects.includes(item.subject)
+      );
+    } else if (type === 'ELR2B2-C') {
+      resultsG2 = results.filter(item => 
+      ELR2B2_C_G2.includes(item.subject) && !selectedSubjects.includes(item.subject)
+      );
+    } else if (type === 'ELR2B2-D') {
+      resultsG2 = results.filter(item => 
+      ELR2B2_D_G2.includes(item.subject) && !selectedSubjects.includes(item.subject)
+      );
+    }
     if (resultsG2.length === 0) {
       setCalculateError('missing relevant subjects');
       return;

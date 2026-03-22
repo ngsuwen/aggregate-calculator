@@ -1,3 +1,7 @@
+export const polyAggregateTypes = ['ELR2B2-A','ELR2B2-B','ELR2B2-C','ELR2B2-D']
+
+export const polyAggregateTypesBCD = ['ELR2B2-B','ELR2B2-C','ELR2B2-D']
+
 export const ELR2B2_A_G1 = ['Art','Music','Economics']
 
 export const ELR2B2_A_G2 = ['Additional Mathematics','Mathematics','Art','Music','Economics']
