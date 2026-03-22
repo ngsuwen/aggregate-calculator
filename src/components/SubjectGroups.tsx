@@ -2,6 +2,14 @@ export const polyAggregateTypes = ['ELR2B2-A','ELR2B2-B','ELR2B2-C','ELR2B2-D']
 
 export const polyAggregateTypesBCD = ['ELR2B2-B','ELR2B2-C','ELR2B2-D']
 
+export const L1R5_L1 = ['English','Higher Chinese','Higher Malay','Higher Tamil']
+
+export const L1R5_R1 = ['Bahasa Indonesia as a Third Language','Chinese (Special Programme)','Geography','Higher Art']
+
+export const L1R5_R2 = ['Additional Mathematics','Mathematics','Biology','Chemistry','Physics','Science (Chemistry, Biology)','Science (Physics, Biology)','Science (Physics, Chemistry)']
+
+export const L1R5_R3 = [...L1R5_R1, ...L1R5_R2, ...L1R5_L1]
+
 export const ELR2B2_A_G1 = ['Art','Music','Economics']
 
 export const ELR2B2_A_G2 = ['Additional Mathematics','Mathematics','Art','Music','Economics']
