@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Typography } from '@mui/material';
 
 const defaultSubjectList = [
-  { group: 'Compulsory', label: 'English', disabled: false },
+  { group: 'Core', label: 'English', disabled: false },
   { group: 'Humanities', label: 'Bahasa Indonesia as a Third Language', disabled: false },
   { group: 'Humanities', label: 'Chinese (Special Programme)', disabled: false },
   { group: 'Humanities', label: 'Geography', disabled: false },
@@ -19,11 +19,14 @@ const defaultSubjectList = [
   { group: 'Humanities', label: 'Humanities (Social Studies, Literature in English)', disabled: false },
   { group: 'Humanities', label: 'Humanities (Social Studies, Literature in Malay)', disabled: false },
   { group: 'Humanities', label: 'Humanities (Social Studies, Literature in Tamil)', disabled: false },
+  { group: 'Humanities', label: 'Intro to Enterprise Development', disabled: false },
   { group: 'Humanities', label: 'Literature in Chinese', disabled: false },
   { group: 'Humanities', label: 'Literature in English', disabled: false },
   { group: 'Humanities', label: 'Literature in Malay', disabled: false },
   { group: 'Humanities', label: 'Literature in Tamil', disabled: false },
-  { group: 'Humanities', label: 'Malay (Special Programme) ', disabled: false },
+  { group: 'Humanities', label: 'Malay (Special Programme)', disabled: false },
+  { group: 'Humanities', label: 'Media Studies (English)', disabled: false },
+  { group: 'Humanities', label: 'Media Studies (Chinese)', disabled: false },
   { group: 'Mathematics', label: 'Additional Mathematics', disabled: false },
   { group: 'Mathematics', label: 'Mathematics', disabled: false },
   { group: 'Science', label: 'Biology', disabled: false },
@@ -45,6 +48,7 @@ const defaultSubjectList = [
   { group: 'Others', label: 'Burmese', disabled: false },
   { group: 'Others', label: 'Business Studies', disabled: false },
   { group: 'Others', label: 'Computing', disabled: false },
+  { group: 'Others', label: 'Creative 3D Animation', disabled: false },
   { group: 'Others', label: 'Design & Technology', disabled: false },
   { group: 'Others', label: 'Design Studies', disabled: false },
   { group: 'Others', label: 'Drama', disabled: false },
@@ -64,6 +68,11 @@ const defaultSubjectList = [
   { group: 'Others', label: 'Thai', disabled: false },
   { group: 'Others', label: 'Urdu', disabled: false },
   { group: 'Religious Knowledge', label: 'Islamic Religious Knowledge', disabled: false },
+  { group: 'Applied Subjects', label: 'Mobile Robotics', disabled: false },
+  { group: 'Applied Subjects', label: 'Smart Electrical Technology', disabled: false },
+  { group: 'Applied Subjects', label: 'Mechanical Design & Automation', disabled: false },
+  { group: 'Applied Subjects', label: 'IoT Applications', disabled: false },
+  { group: 'Applied Subjects', label: 'Mobile Web Applications', disabled: false },
 ]
 
 function App() {

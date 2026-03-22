@@ -18,6 +18,7 @@ import { styled } from '@mui/system';
 import { ELR2B2_A_G1, ELR2B2_A_G2, ELR2B2_B_G2, ELR2B2_BCD_G1, ELR2B2_C_G2, ELR2B2_D_G2, ite4Subjects, ite5Subjects, iteAggregateTypes, iteAggregateTypesEL, L1R5_L1, L1R5_R1, L1R5_R2, L1R5_R3, polyAggregateTypes, polyAggregateTypesBCD, R1B3_R1 } from './SubjectGroups';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 const GroupHeader = styled('div')(() => ({
   position: 'sticky',
@@ -61,6 +62,9 @@ export default function ResultViewer() {
         ? { ...item, disabled: false }
         : item
     ));
+    if (results.length === 1) {
+      setAggregateType('');
+    }
   }
 
   useEffect(() => {
@@ -82,11 +86,11 @@ export default function ResultViewer() {
       >
         <Box sx={{ flexGrow: 1, backgroundColor: result.selected?'#eaffc7':'#ffffff' }}>
           <Grid container spacing={2}>
-            <Grid size={8}>
-              <Typography sx={{fontWeight: 300}}>{result.subject}</Typography>
-            </Grid>
             <Grid size={2}>
               <Typography sx={{fontWeight: 300}}>{result.group}</Typography>
+            </Grid>
+            <Grid size={8}>
+              <Typography sx={{fontWeight: 300}}>{result.subject}</Typography>
             </Grid>
             <Grid size={2}>
               <Typography sx={{fontWeight: 300}}>{result.grade}</Typography>
@@ -360,9 +364,15 @@ export default function ResultViewer() {
       }
     } else {
       // check for B2 (POLY / JC)
-      const resultsB2 = results.filter(item => 
+      let resultsB2 = results.filter(item => 
         !selectedSubjects.includes(item.subject)
       );
+      // exclude islamic religious knowledge for jc
+      if (aggregateType === 'L1R5') {
+        resultsB2 = resultsB2.filter(item => 
+          item.subject != 'Islamic Religious Knowledge'
+        );
+      }
       resultsB2.sort((a, b) => a.score - b.score);
       score = score + resultsB2[0].score + resultsB2[1].score;
       selectedSubjects.push(resultsB2[0].subject)
@@ -403,11 +413,11 @@ export default function ResultViewer() {
         >
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
-              <Grid size={8}>
-                <Typography sx={{fontWeight: 500}}>Subject</Typography>
-              </Grid>
               <Grid size={2}>
                 <Typography sx={{fontWeight: 500}}>Group</Typography>
+              </Grid>
+              <Grid size={8}>
+                <Typography sx={{fontWeight: 500}}>Subject</Typography>
               </Grid>
               <Grid size={2}>
                 <Typography sx={{fontWeight: 500}}>Grade</Typography>
@@ -426,7 +436,8 @@ export default function ResultViewer() {
           textTransform: 'none', 
           fontWeight: 400, 
           fontSize: 16,
-          color: '#242222'
+          color: '#242222',
+          marginBottom: 3
         }} disableRipple onClick={handleOpen}>
           {results.length === 0? "Start by adding subjects":"Add subject"}
         </Button> 
@@ -451,9 +462,21 @@ export default function ResultViewer() {
             {calculateError}
           </Typography> : 
         aggregateScore > 0? 
+          <>
           <Typography sx = {{marginTop: 3, fontWeight: 300}}>
-            net aggregate score: {aggregateScore}
-          </Typography> : ''
+            your aggregate score is : <b>{aggregateScore}</b>
+          </Typography>
+          <Typography sx = {{marginBottom: 3, fontWeight: 300}}>
+            next step is to find your course!
+          </Typography>
+          <Button variant="outlined" startIcon={<OpenInNewIcon sx={{ color: '#3160eb' }}/>} 
+        sx={{ 
+          textTransform: 'none', 
+          fontWeight: 400, 
+          fontSize: 16,
+          color: '#242222'
+        }} disableRipple onClick={()=>window.open("https://www.moe.gov.sg/coursefinder","_blank")}>MOE CourseFinder</Button>
+          </> : ''
         }
         </>
         }

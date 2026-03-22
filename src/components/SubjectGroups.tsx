@@ -6,7 +6,7 @@ export const ite4Subjects = ['B4','ELB3','ELMAB2','MAB3','R1B3']
 
 export const ite5Subjects = ['ELMAB3']
 
-export const R1B3_R1 =['Additional Mathematics','Mathematics','Biology','Chemistry','Physics','Science (Chemistry, Biology)','Science (Physics, Biology)','Science (Physics, Chemistry)']
+export const R1B3_R1 =['Additional Mathematics','Mathematics','Biology','Chemistry','Physics','Science (Chemistry, Biology)','Science (Physics, Biology)','Science (Physics, Chemistry)','Mobile Robotics', 'Smart Electrical Technology', 'Mechanical Design & Automation', 'IoT Applications','Mobile Web Applications']
 
 export const polyAggregateTypes = ['ELR2B2-A','ELR2B2-B','ELR2B2-C','ELR2B2-D']
 
@@ -14,23 +14,23 @@ export const polyAggregateTypesBCD = ['ELR2B2-B','ELR2B2-C','ELR2B2-D']
 
 export const L1R5_L1 = ['English','Higher Chinese','Higher Malay','Higher Tamil']
 
-export const L1R5_R1 = ['Bahasa Indonesia as a Third Language','Chinese (Special Programme)','Geography','Higher Art']
+export const L1R5_R1 = ['Bahasa Indonesia as a Third Language','Chinese (Special Programme)','Geography','Higher Art','Higher Music','History','Humanities (Social Studies, Geography)','Humanities (Social Studies, History)','Humanities (Social Studies, Literature in Chinese)','Humanities (Social Studies, Literature in English)','Humanities (Social Studies, Literature in Malay)','Humanities (Social Studies, Literature in Tamil)','Literature in Chinese','Literature in English','Literature in Malay','Literature in Tamil','Malay (Special Programme)']
 
 export const L1R5_R2 = ['Additional Mathematics','Mathematics','Biology','Chemistry','Physics','Science (Chemistry, Biology)','Science (Physics, Biology)','Science (Physics, Chemistry)']
 
 export const L1R5_R3 = [...L1R5_R1, ...L1R5_R2, ...L1R5_L1]
 
-export const ELR2B2_A_G1 = ['Art','Music','Economics']
+export const ELR2B2_A_G1 = ['Art','Business Studies','Economics','Geography','Higher Art','Higher Music','History','Humanities (Social Studies, Literature in English)','Humanities (Social Studies, Literature in Chinese)','Humanities (Social Studies, Literature in Malay)','Humanities (Social Studies, Literature in Tamil)','Humanities (Social Studies, Geography)','Humanities (Social Studies, History)','Intro to Enterprise Development','Literature in Chinese','Literature in English','Literature in Malay','Literature in Tamil','Media Studies (English)','Media Studies (Chinese)','Music','Economics']
 
-export const ELR2B2_A_G2 = ['Additional Mathematics','Mathematics','Art','Music','Economics']
+export const ELR2B2_A_G2 = [...ELR2B2_A_G1, 'Additional Mathematics','Chinese','Creative 3D Animation','Design & Technology','Design Studies','Nutrition & Food Science','Economics','Higher Chinese','Higher Malay','Higher Tamil','Malay','Mathematics','Principles of Accounts','Tamil']
 
 export const ELR2B2_BCD_G1 = ['Additional Mathematics','Mathematics']
 
-export const ELR2B2_B_G2 = ['Additional Mathematics','Mathematics','Art','Music','Economics']
+export const ELR2B2_B_G2 = [...ELR2B2_A_G1, 'Principles of Accounts']
 
-export const ELR2B2_C_G2 = ['Additional Mathematics','Mathematics','Art','Music','Economics']
+export const ELR2B2_C_G2 = ['Biology','Biotechnology','Chemistry','Computing/Computer Studies','Creative 3D Animation','Design & Technology','Nutrition & Food Science','Electronics','Exercise and Sports Science','Physics','Science (Chemistry, Biology)','Science (Physics, Biology)','Science (Physics, Chemistry)']
 
-export const ELR2B2_D_G2 = ['Additional Mathematics','Mathematics','Art','Music','Economics']
+export const ELR2B2_D_G2 = ['Biology','Biotechnology','Chemistry','Computing/Computer Studies','Creative 3D Animation','Design & Technology','Nutrition & Food Science','Electronics','Physics','Science (Chemistry, Biology)','Science (Physics, Biology)','Science (Physics, Chemistry)','Art','Design Studies','Higher Art','Media Studies (English)','Media Studies (Chinese)']
 
 export const scoreChecker=(grade:string):number=>{
     if (grade === 'A1') { return 1 }
