@@ -12,13 +12,37 @@ import { useDataContext, type ResultsType } from '../DataContext';
 import Modal from '@mui/material/Modal';
 import SubjectSelector from './SubjectSelector';
 import Stack from '@mui/material/Stack';
-import Select, { type SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
 import { useEffect } from 'react';
+import { styled } from '@mui/system';
 import { ELR2B2_A_G1, ELR2B2_A_G2, ELR2B2_B_G2, ELR2B2_BCD_G1, ELR2B2_C_G2, ELR2B2_D_G2, ite4Subjects, ite5Subjects, iteAggregateTypes, iteAggregateTypesEL, L1R5_L1, L1R5_R1, L1R5_R2, L1R5_R3, polyAggregateTypes, polyAggregateTypesBCD, R1B3_R1 } from './SubjectGroups';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+
+const GroupHeader = styled('div')(() => ({
+  position: 'sticky',
+  top: '-8px',
+  padding: '4px 10px',
+  backgroundColor: '#e0e0e0'
+}));
+
+const GroupItems = styled('ul')({
+  padding: 0,
+});
+
+const aggregateTypeList = [
+  {label: 'L1R5', group: 'JC'},
+  {label: 'ELR2B2-A', group: 'POLY'},
+  {label: 'ELR2B2-B', group: 'POLY'},
+  {label: 'ELR2B2-C', group: 'POLY'},
+  {label: 'ELR2B2-D', group: 'POLY'},
+  {label: 'B4', group: 'ITE'},
+  {label: 'ELB3', group: 'ITE'},
+  {label: 'ELMAB2', group: 'ITE'},
+  {label: 'ELMAB3', group: 'ITE'},
+  {label: 'MAB3', group: 'ITE'},
+  {label: 'R1B3', group: 'ITE'}
+]
 
 export default function ResultViewer() {
   const { results, setResults, open, setOpen, SetSubjectList, subjectList } = useDataContext();
@@ -74,8 +98,18 @@ export default function ResultViewer() {
     }
   )
 
-  const selectAggregateType = (event: SelectChangeEvent) => {
-    setAggregateType(event.target.value as string);
+  const selectAggregateType = (value: any) => {
+    if (value) {
+      if (aggregateTypeList.some(item =>
+        item.label.includes(value.label)
+      )) {
+        setAggregateType(value.label);
+      } else {
+        setAggregateType('')
+      }
+    } else {
+      setAggregateType('')
+    }
   };
 
   const checkRequirements=()=>{
@@ -116,6 +150,10 @@ export default function ResultViewer() {
       }
     } else if (aggregateType !== '') {
       throw new Error('aggregate type not found');
+    } else {
+      setCalculateError('');
+      setAggregateScore(0);
+      resetSelected();
     }
   }
 
@@ -376,22 +414,20 @@ export default function ResultViewer() {
         </Button> 
         {results.length === 0? '':
         <>
-        <FormControl variant="standard" fullWidth sx = {{marginTop: 2}}>
-          <InputLabel id="demo-simple-select-standard-label">Select Aggregate Type</InputLabel>  
-          <Select value={aggregateType} onChange={selectAggregateType}>
-            <MenuItem value="L1R5">(JC) L1R5</MenuItem>
-            <MenuItem value="ELR2B2-A">(POLY) ELR2B2-A</MenuItem>
-            <MenuItem value="ELR2B2-B">(POLY) ELR2B2-B</MenuItem>
-            <MenuItem value="ELR2B2-C">(POLY) ELR2B2-C</MenuItem>
-            <MenuItem value="ELR2B2-D">(POLY) ELR2B2-D</MenuItem>
-            <MenuItem value="B4">(ITE) B4</MenuItem>
-            <MenuItem value="ELB3">(ITE) ELB3</MenuItem>
-            <MenuItem value="ELMAB2">(ITE) ELMAB2</MenuItem>
-            <MenuItem value="ELMAB3">(ITE) ELMAB3</MenuItem>
-            <MenuItem value="MAB3">(ITE) MAB3</MenuItem>
-            <MenuItem value="R1B3">(ITE) R1B3</MenuItem>
-          </Select>
-        </FormControl>
+        <Autocomplete
+          fullWidth
+          options={aggregateTypeList}
+          groupBy={(option) => option.group}
+          renderInput={(params) => <TextField {...params} label="Select Aggregate Type" variant="standard" />}
+          renderGroup={(params) => (
+            <li key={params.key}>
+              <GroupHeader>{params.group}</GroupHeader>
+              <GroupItems>{params.children}</GroupItems>
+            </li>
+          )}
+          clearOnBlur
+          onChange={(_event, value) => selectAggregateType(value)}
+        />
         {calculateError !== ''?
           <Typography sx = {{marginTop: 3, fontWeight: 300, color:'#ed6464'}}>
             {calculateError}
