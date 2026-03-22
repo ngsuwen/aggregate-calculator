@@ -181,10 +181,18 @@ export default function ResultViewer() {
       }
     }
 
+    if (aggregateType === 'L1R5' || polyAggregateTypes.includes(aggregateType)){
+      if (results[englishIndex].group !== '3') {
+        setCalculateError('english must be G3');
+        resetSelected();
+        return;
+      }
+    }
+
     if (aggregateType === 'L1R5') {
       let resultsL1:ResultsType[] = [];
       resultsL1 = results.filter(item => 
-      L1R5_L1.includes(item.subject)
+      L1R5_L1.includes(item.subject) && item.group === '3'
       );
       resultsL1.sort((a, b) => a.score - b.score);
       score += resultsL1[0].score;
@@ -205,11 +213,11 @@ export default function ResultViewer() {
       let resultsG1:ResultsType[] = [];
       if (aggregateType === 'ELR2B2-A') {
         resultsG1 = results.filter(item => 
-        ELR2B2_A_G1.includes(item.subject)
+        ELR2B2_A_G1.includes(item.subject) && !selectedSubjects.includes(item.subject) && item.group === '3'
         );
       } else if (polyAggregateTypesBCD.includes(aggregateType)) {
         resultsG1 = results.filter(item => 
-        ELR2B2_BCD_G1.includes(item.subject)
+        ELR2B2_BCD_G1.includes(item.subject) && !selectedSubjects.includes(item.subject) && item.group === '3'
         );
       }
       if (resultsG1.length === 0) {
@@ -225,19 +233,19 @@ export default function ResultViewer() {
       let resultsG2:ResultsType[] = [];
       if (aggregateType === 'ELR2B2-A') {
         resultsG2 = results.filter(item => 
-        ELR2B2_A_G2.includes(item.subject) && !selectedSubjects.includes(item.subject)
+        ELR2B2_A_G2.includes(item.subject) && !selectedSubjects.includes(item.subject) && item.group === '3'
         );
       } else if (aggregateType === 'ELR2B2-B') {
         resultsG2 = results.filter(item => 
-        ELR2B2_B_G2.includes(item.subject) && !selectedSubjects.includes(item.subject)
+        ELR2B2_B_G2.includes(item.subject) && !selectedSubjects.includes(item.subject) && item.group === '3'
         );
       } else if (aggregateType === 'ELR2B2-C') {
         resultsG2 = results.filter(item => 
-        ELR2B2_C_G2.includes(item.subject) && !selectedSubjects.includes(item.subject)
+        ELR2B2_C_G2.includes(item.subject) && !selectedSubjects.includes(item.subject) && item.group === '3'
         );
       } else if (aggregateType === 'ELR2B2-D') {
         resultsG2 = results.filter(item => 
-        ELR2B2_D_G2.includes(item.subject) && !selectedSubjects.includes(item.subject)
+        ELR2B2_D_G2.includes(item.subject) && !selectedSubjects.includes(item.subject) && item.group === '3'
         );
       }
       if (resultsG2.length === 0) {
@@ -254,7 +262,7 @@ export default function ResultViewer() {
       // check for R1 (JC)
       let resultsR1:ResultsType[] = [];
       resultsR1 = results.filter(item => 
-      L1R5_R1.includes(item.subject) && !selectedSubjects.includes(item.subject)
+      L1R5_R1.includes(item.subject) && !selectedSubjects.includes(item.subject) && item.group === '3'
       );
       if (resultsR1.length === 0) {
         setCalculateError('missing relevant subjects from humanities (R1)');
@@ -268,7 +276,7 @@ export default function ResultViewer() {
       // check for R2 (JC)
       let resultsR2:ResultsType[] = [];
       resultsR2 = results.filter(item => 
-      L1R5_R2.includes(item.subject) && !selectedSubjects.includes(item.subject)
+      L1R5_R2.includes(item.subject) && !selectedSubjects.includes(item.subject) && item.group === '3'
       );
       if (resultsR2.length === 0) {
         setCalculateError('missing relevant subjects from mathematics or science (R2)');
@@ -283,7 +291,7 @@ export default function ResultViewer() {
       // check for R3 (JC)
       let resultsR3:ResultsType[] = [];
       resultsR3 = results.filter(item => 
-      L1R5_R3.includes(item.subject) && !selectedSubjects.includes(item.subject)
+      L1R5_R3.includes(item.subject) && !selectedSubjects.includes(item.subject) && item.group === '3'
       );
       if (resultsR3.length === 0) {
         setCalculateError('missing relevant subjects from humanities, mathematics or science (R3)');
@@ -365,7 +373,7 @@ export default function ResultViewer() {
     } else {
       // check for B2 (POLY / JC)
       let resultsB2 = results.filter(item => 
-        !selectedSubjects.includes(item.subject)
+        !selectedSubjects.includes(item.subject) && item.group === '3'
       );
       // exclude islamic religious knowledge for jc
       if (aggregateType === 'L1R5') {
