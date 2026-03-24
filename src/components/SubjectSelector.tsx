@@ -37,7 +37,7 @@ const GroupItems = styled('ul')({
 export default function SubjectSelector() {
   const { results, setResults, setOpen, subjectList, SetSubjectList } = useDataContext();
   const [ subject, setSubject ] = useState<string>();
-  const [ group, setGroup ] = useState<string>();
+  const [ group, setGroup ] = useState<string|null>();
   const [ grade, setGrade ] = useState<string>();
   const [ errorSub, setErrorSub ] = useState<boolean>(false);
   const [ errorGrp, setErrorGrp ] = useState<boolean>(false);
@@ -89,14 +89,13 @@ export default function SubjectSelector() {
   }
 
   function selectGroup(grp:string): void {
+    selectGrade(undefined);
     setGroup(grp)
   }
 
-  function selectGrade(grade:string): void {
+  function selectGrade(grade:string|undefined): void {
     setGrade(grade)
   }
-
-  
 
   return (
     <Card variant="outlined" sx={style}>
@@ -123,12 +122,12 @@ export default function SubjectSelector() {
           onChange={(_event, value) => selectSubject(value)}
         />
         <Typography component="span" variant="body2" sx ={{display: 'inline-block', mb:1}}>
-          Select group {errorGrp? <Typography component="span" variant="body2" sx ={{color:'#ed6464'}}>* required</Typography>:''}
+          Select level {errorGrp? <Typography component="span" variant="body2" sx ={{color:'#ed6464'}}>* required</Typography>:''}
         </Typography>
         <Stack direction="row" spacing={1}>
-          <Chip color={group === '1'?"primary":"default"} label="1" onClick={()=>selectGroup('1')}/>
-          <Chip color={group === '2'?"primary":"default"} label="2" onClick={()=>selectGroup('2')}/>
-          <Chip color={group === '3'?"primary":"default"} label="3" onClick={()=>selectGroup('3')}/>
+          <Chip color={group === '1'?"primary":"default"} label="G1" onClick={()=>selectGroup('1')}/>
+          <Chip color={group === '2'?"primary":"default"} label="G2" onClick={()=>selectGroup('2')}/>
+          <Chip color={group === '3'?"primary":"default"} label="G3" onClick={()=>selectGroup('3')}/>
         </Stack>
         {group?
         <Typography component="span" variant="body2" sx ={{display: 'inline-block', mb:1, mt:3}}>

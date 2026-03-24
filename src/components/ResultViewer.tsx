@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
+import { Chip, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useDataContext, type ResultsType } from '../DataContext';
 import Modal from '@mui/material/Modal';
@@ -19,6 +19,7 @@ import { ELR2B2_A_G1, ELR2B2_A_G2, ELR2B2_B_G2, ELR2B2_BCD_G1, ELR2B2_C_G2, ELR2
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import DoneIcon from '@mui/icons-material/Done';
 
 const GroupHeader = styled('div')(() => ({
   position: 'sticky',
@@ -52,6 +53,7 @@ export default function ResultViewer() {
   const [aggregateType, setAggregateType] = useState<string>('');
   const [aggregateScore, setAggregateScore] = useState<number>(0);
   const [calculateError, setCalculateError] = useState<string>('');
+  const [pathway, setPathway] = useState<string>('');
   
   function removeSubject(result:ResultsType): void {
     setResults(results.filter(function(value) { 
@@ -87,7 +89,7 @@ export default function ResultViewer() {
         <Box sx={{ flexGrow: 1, backgroundColor: result.selected?'#eaffc7':'#ffffff' }}>
           <Grid container spacing={2}>
             <Grid size={2}>
-              <Typography sx={{fontWeight: 300}}>{result.group}</Typography>
+              <Typography sx={{fontWeight: 300}}>G{result.group}</Typography>
             </Grid>
             <Grid size={8}>
               <Typography sx={{fontWeight: 300}}>{result.subject}</Typography>
@@ -166,6 +168,16 @@ export default function ResultViewer() {
      ({...item, selected: false}));
     setResults(reset);
   }
+
+  const selectPathway = (path:string) => {
+    // if (pathway.includes(path)) {
+    //   setPathway(pathway.filter((item)=>item!==path))
+    // } else {
+    //   setPathway([...pathway,path])
+    // }
+    setPathway(path)
+    setAggregateType('')
+  };
 
   const calculateScore=()=>{
     let score = 0;
@@ -422,7 +434,7 @@ export default function ResultViewer() {
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
               <Grid size={2}>
-                <Typography sx={{fontWeight: 500}}>Group</Typography>
+                <Typography sx={{fontWeight: 500}}>Level</Typography>
               </Grid>
               <Grid size={8}>
                 <Typography sx={{fontWeight: 500}}>Subject</Typography>
@@ -451,11 +463,34 @@ export default function ResultViewer() {
         </Button> 
         {results.length === 0? '':
         <>
-        <Autocomplete
+        {/* <FormControl fullWidth>
+          <InputLabel>Select pathway</InputLabel>
+          <Select
+            value={pathway}
+            label="Select pathway"
+            onChange={selectPathway}
+          >
+            <MenuItem value='JC'>JC</MenuItem>
+            <MenuItem value='ITE'>ITE</MenuItem>
+            <MenuItem value='POLY'>Polytechnic</MenuItem>
+          </Select>
+        </FormControl> */}
+        <Typography sx={{ 
+          textTransform: 'none', 
+          fontWeight: 300,
+          color: '#242222'
+        }} >select pathway:</Typography>
+
+        <Stack direction="row" spacing={2} sx={{alignItems: "center", marginTop: 2, marginBottom: 4}}> 
+        <Chip icon={pathway==='JC'?<DoneIcon />:<></>} color="primary" variant={pathway==='JC'?"filled":"outlined"} label="JC" onClick={()=>selectPathway('JC')}/>
+        <Chip icon={pathway==='POLY'?<DoneIcon />:<></>}color="primary" variant={pathway==='POLY'?"filled":"outlined"} label="Polytechnic"  onClick={()=>selectPathway('POLY')}/>
+        <Chip icon={pathway==='ITE'?<DoneIcon />:<></>}color="primary" variant={pathway==='ITE'?"filled":"outlined"} label="ITE"  onClick={()=>selectPathway('ITE')}/>
+        </Stack>
+        {pathway!==''?<Autocomplete
           fullWidth
-          options={aggregateTypeList}
+          options={aggregateTypeList.filter((type)=>pathway===type.group)}
           groupBy={(option) => option.group}
-          renderInput={(params) => <TextField {...params} label="Select Aggregate Type" variant="standard" />}
+          renderInput={(params) => <TextField {...params} label={pathway===''?"Select pathway first":"Select Aggregate Type"} variant="standard" />}
           renderGroup={(params) => (
             <li key={params.key}>
               <GroupHeader>{params.group}</GroupHeader>
@@ -463,8 +498,9 @@ export default function ResultViewer() {
             </li>
           )}
           clearOnBlur
+          key={pathway}
           onChange={(_event, value) => selectAggregateType(value)}
-        />
+        />:""}
         {calculateError !== ''?
           <Typography sx = {{marginTop: 3, fontWeight: 300, color:'#ed6464'}}>
             {calculateError}
